@@ -1,0 +1,33 @@
+<svg width="1280" height="320" viewBox="0 0 1280 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#6F00FF" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#6F00FF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#1D0038" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="320" fill="#1D0038"/>
+  <rect width="1280" height="320" fill="url(#glow)"/>
+  <!-- 涟漪母题 -->
+  <g stroke="#A050FF" fill="none">
+    <circle cx="1060" cy="160" r="60"  stroke-opacity="0.55" stroke-width="2.5"/>
+    <circle cx="1060" cy="160" r="105" stroke-opacity="0.35" stroke-width="2.5"/>
+    <circle cx="1060" cy="160" r="150" stroke-opacity="0.22" stroke-width="2.5"/>
+    <circle cx="1060" cy="160" r="195" stroke-opacity="0.12" stroke-width="2.5"/>
+    <circle cx="1060" cy="160" r="240" stroke-opacity="0.06" stroke-width="2.5"/>
+  </g>
+  <!-- 声波 → 画面 隐喻 -->
+  <g fill="#7C9CFD">
+    <rect x="96"  y="140" width="7" height="40" rx="3.5" opacity="0.9"/>
+    <rect x="112" y="120" width="7" height="80" rx="3.5" opacity="0.8"/>
+    <rect x="128" y="100" width="7" height="120" rx="3.5"/>
+    <rect x="144" y="128" width="7" height="64" rx="3.5" opacity="0.8"/>
+    <rect x="160" y="148" width="7" height="24" rx="3.5" opacity="0.6"/>
+  </g>
+  <text x="196" y="172" font-family="-apple-system,'Segoe UI',Roboto,'PingFang SC',sans-serif" font-size="21" fill="#9FB7FF">→</text>
+  <text x="1046" y="172" font-size="34" fill="#F9F339" font-family="-apple-system,sans-serif">✦</text>
+  <!-- 标题 -->
+  <text x="238" y="150" font-family="-apple-system,'Segoe UI',Roboto,sans-serif" font-size="52" font-weight="800" fill="#FFFFFF">voiceover-motion-video</text>
+  <text x="240" y="204" font-family="-apple-system,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif" font-size="26" fill="#E3D9FF">口播音频 → 品牌视觉动效解说视频 · Claude Code Skill</text>
+  <text x="240" y="248" font-family="-apple-system,'Segoe UI',Roboto,sans-serif" font-size="17" fill="#9FB7FF" opacity="0.85">transcribe → storyboard → approve → build → verify → render</text>
+</svg>

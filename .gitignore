@@ -1,0 +1,8 @@
+node_modules/
+out/
+.DS_Store
+*.mp3
+*.wav
+*.m4a
+template/public/logos/*.png
+transcript.json

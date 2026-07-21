@@ -1,0 +1,51 @@
+<svg width="1400" height="270" viewBox="0 0 1400 270" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="270" fill="#1D0038" rx="18"/>
+  <g font-family="-apple-system,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif">
+    <!-- step boxes -->
+    <g>
+      <rect x="34"  y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
+      <rect x="262" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
+      <rect x="490" y="62" width="190" height="128" rx="20" fill="#F9F339" fill-opacity="0.07" stroke="#F9F339" stroke-opacity="0.8" stroke-width="3"/>
+      <rect x="718" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
+      <rect x="946" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
+      <rect x="1174" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
+    </g>
+    <!-- emojis -->
+    <g font-size="40" text-anchor="middle">
+      <text x="129"  y="118">🎙️</text>
+      <text x="357"  y="118">📋</text>
+      <text x="585"  y="118">🚦</text>
+      <text x="813"  y="118">🧩</text>
+      <text x="1041" y="118">🔍</text>
+      <text x="1269" y="118">🎬</text>
+    </g>
+    <!-- labels -->
+    <g font-size="26" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+      <text x="129"  y="156">带时间戳转写</text>
+      <text x="357"  y="156">分镜动效计划</text>
+      <text x="585"  y="156" fill="#F9F339">用户确认</text>
+      <text x="813"  y="156">场景搭建</text>
+      <text x="1041" y="156">关键帧抽查</text>
+      <text x="1269" y="156">渲染交付</text>
+    </g>
+    <!-- sublabels -->
+    <g font-size="16" fill="#9FB7FF" text-anchor="middle">
+      <text x="129"  y="180">VAD + SenseVoice</text>
+      <text x="357"  y="180">分镜表 · 先定比例</text>
+      <text x="585"  y="180" fill="#E3D9FF">硬闸门 · 不点头不动工</text>
+      <text x="813"  y="180">Remotion 逐帧确定性</text>
+      <text x="1041" y="180">静帧自查 8 项</text>
+      <text x="1269" y="180">H.264 + 原声口播</text>
+    </g>
+    <!-- arrows -->
+    <g font-size="30" fill="#7C9CFD" text-anchor="middle">
+      <text x="243"  y="136">➜</text>
+      <text x="471"  y="136">➜</text>
+      <text x="699"  y="136">➜</text>
+      <text x="927"  y="136">➜</text>
+      <text x="1155" y="136">➜</text>
+    </g>
+    <!-- title -->
+    <text x="40" y="40" font-size="19" fill="#A050FF" letter-spacing="4">口播音频 → 动效解说视频 · 六步流水线</text>
+  </g>
+</svg>

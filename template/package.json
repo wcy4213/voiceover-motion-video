@@ -1,0 +1,18 @@
+{
+  "name": "voiceover-motion-video-template",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.jsx",
+    "compositions": "remotion compositions src/index.jsx",
+    "still": "remotion still src/index.jsx",
+    "render": "remotion render src/index.jsx EarningsWeek out/video.mp4 --codec=h264 --crf=17"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.438",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.438"
+  }
+}
