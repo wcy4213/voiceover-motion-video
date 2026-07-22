@@ -39,8 +39,9 @@ const SCENES = [
 ];
 
 // 场景切点：涟漪擦除转场（切点前后各 14 帧，紫色圆形先盖住再揭开）
+// 转场分层级：WIPES 只放大章节切点（涟漪擦除）；小节切换不进数组=硬切，不占时间
 const WIPES = [TL.s1, TL.s2, TL.s3, TL.s4, TL.s5, TL.s6, TL.s7, TL.s8, TL.s9];
-const WIPE_HALF = 14;
+const WIPE_HALF = 10;
 
 const RippleWipe = () => {
   const frame = useCurrentFrame(); // 0..28

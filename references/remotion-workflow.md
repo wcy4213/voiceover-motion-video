@@ -35,7 +35,8 @@ npm run studio                   # Remotion Studio 实时预览
 - `Chip / Kicker` — 药丸标签 / 小节标题（两侧短线）
 - `useShake` — 冲击瞬间屏幕震动
 - `TickerChip / Logo` — 主体出场规范组件（logo 圆角块 + $代码药丸）
-- `Video.jsx` 里的 `ChapterTab`（顶部章节标签）和 `RippleWipe`（涟漪转场）直接复用
+- `ExecQuote`（components/Exec.jsx）— 高管/名人抠图出场：照片侧滑弹入 + 白色引言气泡 + 姓名牌，props: photo/name/title/quote/delay/photoH/side/quoteSize。照片是 public/<slug>/ 下的 rembg 抠图 png
+- `Video.jsx` 里的 `ChapterTab`（顶部章节标签）和 `RippleWipe`（涟漪转场）直接复用；WIPES 数组**只放大章节切点**（转场分层级，WIPE_HALF=10），小节切换靠 Sequence 硬切
 - 示例场景即模式库：折线图逐帧画出（S1/S7）、象形阵列（S2 车辆/S5 电池）、仪表盘（S6 Gauge）、硬币翻面（S7）、横滑快卡+进度点（S8）、决策树（S9）
 
 多拍场景写法：一个 Sequence 内用局部帧常量（`const BEAT2 = TL.xx_beat2 - TL.xx`）分拍，各拍独立绝对定位容器 + 交叉淡入淡出。

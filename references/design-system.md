@@ -28,10 +28,12 @@ export const F = {
 ## 2. 内容与排版纪律
 
 - **文字纪律**：屏上只有关键词、数字、emoji、logo。口播讲整句，屏幕只给锚点。一行关键词 > 一段话。ASR 错字按正确写法上屏（Megapack/CapEx/FSD/18A…），数字以口播为准
+- **文字上限（用户实测反馈"字还是有点多"后定的）**：卡片只留一行主文案，**副标题/解释行默认不加**；chip 文案 ≤10 个字（"广告这条线·大概率是稳的✓"→"广告线·稳✓"）；同屏文字组 ≤4 个
 - **公司出场规范**：官方 logo（parqet CDN 方形色块图，`borderRadius: size*0.24` 做成 app-icon 风）+ 中文名 + `$TICKER` 药丸。首次出场用大 TickerChip 弹簧入场，之后小尺寸出现在章节标签/决策树里
 - **信息层级字号**（1:1 画布参考）：巨数字 128-170 / 标题 72-86 / 关键词行 40-54 / chip 26-40 / 免责小字 26
 - **顶部章节标签**（ChapterTab）：讲多家公司/多章节的视频必备，顶部居中小药丸显示"当前讲到谁"，mini logo + 文案，跨场景持续。场景内的 kicker 标题 marginTop ≥ 100 给它让位
 - **安全区**：1:1 画布四边留 ≥ 80px；卡片宽度 ≤ 920
+- **字幕安全区（默认开启）**：底部 ~170px 不放任何内容，贴底元素一律 `bottom ≥ 175`——用户通常要在成片下方自行加字幕。带人物抠图的场景，照片+姓名牌整体也要压在这条线以上
 
 ## 3. 动效语言（服务理解，不炫技）
 
@@ -40,11 +42,11 @@ export const F = {
 | 元素登场 | spring 缩放弹入（damping 11-14），组内 stagger 6-20 帧 |
 | 数字 | count-up 滚动（Easing.out(cubic)，30-44 帧），`fontVariantNumeric: tabular-nums` |
 | 涨/跌 | 绿/红折线 strokeDashoffset 逐帧画出，端点脉冲圆点 |
-| 冲击瞬间（暴跌等） | 大数字 from=1.9 overshoot 砸入 + 屏幕 shake 10 帧 + 红色闪光 opacity 0.14 |
+| 冲击瞬间（暴跌等） | 大数字 overshoot 砸入 + 屏幕 shake 10 帧 + 红色闪光 opacity 0.14。**过冲上限**：局部数字/图章 from ≤1.3；全宽卡片/chip from ≤1.25，更大值入场瞬间会放大出框（用户实测投诉过） |
 | 数量感 | 象形阵列逐个点亮（🚗×32、电池块 grid） |
 | 对比/抉择 | 左右分屏交替脉冲、岔路口 svg 分支线生长 |
 | 转变 | 硬币 rotateY 翻面（backfaceVisibility hidden 两面各一 div） |
-| 场景切换 | 紫色涟漪径向擦除：切点前后各 14 帧，圆形 radial-gradient 先盖满再收走 |
+| 场景切换（**分层级**） | 大章节切换：紫色涟漪径向擦除，切点前后各 **10** 帧（≈0.67s）；小节/同章节切换：**硬切**（场景自带弹入动效足够缓冲）。全片涟漪 ≤10 次——首版 13 个切点全用 14 帧涟漪被用户投诉"转场时间都很长" |
 | 拍内切换（同场景多拍） | 上一拍 opacity/scale 退场 + 下一拍独立容器；退场要**退干净**（见坑 #2） |
 
 节拍感：一个场景内每 2-4 秒必须有新元素进场或状态变化，跟着口播语义走；口播提到什么，什么才出现。
@@ -59,9 +61,13 @@ export const F = {
 6. **比例锁定**：1:1 和 9:16 布局参数完全不同（每个 marginTop/字号都不同），中途换比例=所有场景重排。写代码前必须和用户敲定
 7. **Edit 工具匹配**：中文文案里全角？！：和半角混用，Edit old_string 匹配失败时先 Read 原文
 8. **背景 logo 矩阵**：装饰性 logo 群透明度 ≤ 0.55、避开主数字的 y 区间，出场后要在下一个主元素登场前淡出
+9. **拍容器必须 flex 居中**：多拍场景的 absolute 全屏容器（`position:absolute; top:0; width:100%`）默认是块流，里面的 svg（inline）和 Pop/Chip（块级）会全部**靠左贴边**，连线也对不准居中的 logo 行。容器一律加 `display:"flex", flexDirection:"column", alignItems:"center"`，或每个子元素自带 `display:flex; justifyContent:center` 包一层
+10. **带底色 emoji 黑名单补充**：📈📉⤴️⬆️ 在深紫底上带白/蓝方块底，禁用；替代：涨跌用文字 ▲/🔻，箭头用 svg。已验证无底色可用：📊🐄🤑💥🗄️⏳🚪🎭🧊📦
 
 ## 5. 素材
 
 - **公司 logo**：`curl -sL "https://assets.parqet.com/logos/symbol/<TICKER>?format=png&size=200" -o public/logos/<TICKER>.png`，方形品牌色块，直接圆角化即可；拉不到的公司用 `$TICKER` 药丸兜底
+- **人物照片抠图**（高管/名人出场）：优先 Wikimedia Commons（CC 授权、高清），没有再从新闻源/官网找彩色正脸照 → rembg 抠图（`pip install rembg`，首次运行自动下载 u2net 模型）→ `getbbox()` 裁掉透明边 → 存 `public/<slug>/xxx.png`。**验收**：合成到深紫底上肉眼检查发丝边缘有无杂色；黑白照和彩照别混用。上屏用 `components/Exec.jsx` 的 ExecQuote（照片侧滑入 + 引言气泡 + 姓名牌），口播"管理层说/预告"处是天然出场点
+- **白色 logo 变体**：深色 wordmark 在紫底上看不清时，用 PIL 把不透明像素统一刷成 #F2ECFF 生成 `_white` 版
 - **emoji 即插图**：macOS 本机渲染 Apple Color Emoji，无需额外字体
 - 需要图表/仪表盘/晶圆等图形一律 svg 代码画，不找图片素材
