@@ -25,6 +25,8 @@ npm run studio                   # Remotion Studio 实时预览
 | `src/scenes/*.jsx` | 按新分镜重写（组件语汇沿用：Kicker/Chip/Pop/Rise/CountUp/TickerChip） |
 | `src/Root.jsx` | Composition id、width/height（比例和用户确认）、durationInFrames |
 
+**⚠️ S0 开场不能沿用模板**：每条视频的 S0 封面帧必须重新设计（frame 0 完整可见的 日期+抠图主视觉+标题，构图和历史成片不同），规范见 design-system.md §1.5——短视频平台会对首帧查重，沿用模板开场=被判批量同质化限流。
+
 `src/theme.js`（品牌 tokens）、`src/components/`（Backdrop 涟漪、ui 工具集、TickerChip）一般原样保留；换品牌只改 theme.js。
 
 ## 2. 组件速查

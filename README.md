@@ -76,10 +76,12 @@ voiceover-motion-video/
 ├── SKILL.md                     # skill 主流程（Claude 读这个干活）
 ├── scripts/
 │   ├── transcribe_ts.py         # 带时间戳转写（VAD + SenseVoice）
-│   └── align_marks.py           # 分镜切点计算（字符比例法 → 秒 + 帧号）
+│   ├── align_marks.py           # 分镜切点计算（字符比例法 → 秒 + 帧号）
+│   └── broll_fetch.py           # B-roll 素材搜采（Pexels/Pixabay/Openverse/YouTube）+ 防复用台账
 ├── references/
-│   ├── design-system.md         # 品牌 tokens · 动效语言 · 8 条踩坑清单
-│   └── remotion-workflow.md     # 工程手册 · 组件速查 · 渲染命令
+│   ├── design-system.md         # 品牌 tokens · 动效语言 · 首帧/封面规范 · 踩坑清单
+│   ├── remotion-workflow.md     # 工程手册 · 组件速查 · 渲染命令
+│   └── broll-assets.md          # 实拍素材规范：配额 · 分镜映射 · 信源与版权红线 · 防复用
 ├── template/                    # 独立 Remotion 工程 + 示例视频全场景源码
 └── assets/                      # README 配图
 ```
@@ -97,6 +99,12 @@ voiceover-motion-video/
 
 ## 🔁 迭代记录
 
+**v3 · 2026-07-24**（连续多期同款开场被抖音判"批量发布违规或低质内容"限流后，针对平台查重机制的一轮硬迭代）：
+
+- **首帧/封面规范（design-system.md §1.5）** — frame 0 就是封面也是查重重点：必须排版完整（日期章 + rembg 抠图主视觉 + 标题）、构图条条不同；S0 拆"封面拍"，渲 `--frame=0` 验收并存档比对。根因：开场全靠 spring 从 0 弹入 → 首帧全是同款空底
+- **B-roll 实拍素材管线（broll_fetch.py + broll-assets.md）** — 动效为主、每期掺 2–3 处实拍/图片点缀（品牌卡片画中画 / 压暗背景层 / Ken Burns 图片）。四源搜采：Pexels/Pixabay API（免费可商用）、Openverse（CC 过滤）、YouTube（yt-dlp 切区间，美联储/国会官方频道=公有领域）；ledger.json 台账防跨期复用撞指纹
+- **版权红线写进规范** — 只从源头拿无水印素材；绝不抹他人水印台标（著作权法 §53(7)）；Pexels 简介署名、CC BY 素材署名作者、AI 素材主动标注
+
 **v2 · 2026-07-22**（第二支成片《谷歌 Q2 财报前瞻》3'44" 落地后，按真实用户反馈迭代）：
 
 - **转场分层级** — 只有大章节切换用径向擦除（前后各 10 帧），小节切换硬切；首版全部切点都上 14 帧擦除，被反馈"转场时间都很长"
@@ -110,6 +118,7 @@ voiceover-motion-video/
 
 - **转写**：Python 3.10+，`funasr` + `soundfile`，ffmpeg（模型首次运行自动下载，~1GB，之后全离线）
 - **渲染**：Node ≥ 18，Remotion 4.x（模板已锁版本）
+- **素材抓取（可选）**：`pip install "yt-dlp[default]"`（YouTube 下载）；Pexels / Pixabay 免费 API key（图库搜采，纯标准库调用无额外依赖）
 - **emoji**：macOS 开箱即用；Linux 渲染需装 Noto Color Emoji 并自查静帧
 
 ## 🙌 Credits
