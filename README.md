@@ -15,17 +15,31 @@
 
 ## ✨ 成片效果
 
-首个成片《Q2 美股财报周前瞻》：1080×1080 @30fps · 3'08" · 全程动效跟口播时间戳对齐。
+### 皮肤① 黑底点阵（投研线，`skins/black-dotgrid/`）
 
-| 开场日历 | 暴跌冲击 | 电池堆叠 |
+《财报周前瞻》1084×884 @30fps · 3'44" · 近黑底+紫点阵漂移光晕，全程动效跟口播时间戳对齐：
+
+| 财报日历 + 实拍背景层 | 仪表盘 + 章节标签 | 折线画出 + 判词 |
 |---|---|---|
-| ![](assets/demo-1-calendar.jpg) | ![](assets/demo-2-crash.jpg) | ![](assets/demo-3-megapack.jpg) |
+| ![](assets/skin-black-1-calendar.jpg) | ![](assets/skin-black-2-gauge.jpg) | ![](assets/skin-black-3-line.jpg) |
 
-| 预期仪表盘 | 隐含波动分屏 | 剧本决策树 |
+### 皮肤② 分析师手账（投教线，`skins/paper/`）
+
+《德鲁肯米勒 30 年不亏损》1080×1440 · 6'08" · 米白纸底+墨字+荧光笔+印章+烧录字幕，观感是"一页值得收藏的笔记"：
+
+| 拍立得 + 便签 + 实拍窗 | 手绘图表 + 荧光笔 | 印章 + 象形阵列 |
 |---|---|---|
-| ![](assets/demo-4-gauge.jpg) | ![](assets/demo-5-updown.jpg) | ![](assets/demo-6-scenarios.jpg) |
+| ![](assets/skin-paper-1-polaroid.jpg) | ![](assets/skin-paper-2-chart.jpg) | ![](assets/skin-paper-3-stamp.jpg) |
 
-*示例内容为美股财报解读，仅作演示，不构成投资建议。*
+### 初代示例（`template/` 完整工程，旧深空紫皮肤）
+
+首个成片《Q2 美股财报周前瞻》1080×1080 · 3'08"，10 个场景源码全在 `template/`：
+
+| 开场日历 | 暴跌冲击 | 预期仪表盘 |
+|---|---|---|
+| ![](assets/demo-1-calendar.jpg) | ![](assets/demo-2-crash.jpg) | ![](assets/demo-4-gauge.jpg) |
+
+*示例内容为美股财报/投教解读，仅作演示，不构成投资建议。*
 
 ## 🧭 它怎么工作
 
