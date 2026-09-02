@@ -6,3 +6,4 @@ out/
 *.m4a
 template/public/logos/*.png
 transcript.json
+__pycache__/

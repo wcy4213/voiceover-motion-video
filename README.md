@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/ASR-SenseVoice-7C9CFD" alt="SenseVoice"/>
 </p>
 
-**一条口播音频，产出一支品牌视觉的全屏动效解说视频。** 这是一个 [Claude Code](https://claude.com/claude-code) skill：把"转写 → 分镜 → 用户确认 → Remotion 搭建 → 静帧自查 → 渲染交付"整条流水线固化成可复用的工作流，屏幕上只有关键词、大数字、emoji 和 logo——画面服务理解，观众听的是你的原声口播。
+**一条口播音频，产出一支品牌视觉的全屏动效解说视频。** 这是一个 [Claude Code](https://claude.com/claude-code) skill：把"转写 → 分镜 → 用户确认 → Remotion 搭建 → 静帧自查 → 渲染交付"整条流水线固化成可复用的工作流，屏幕上只有关键词、大数字、emoji 和 logo——画面服务理解，观众听的是你的原声口播。内置**两套视觉皮肤**（黑底点阵投研风 / 分析师手账纸面风）、跨视频共享动效库 motionkit（含 3D 层）、烧录字幕管线和排版自动质检。
 
 > **EN**: A Claude Code skill that turns a voiceover audio track into a brand-styled, full-screen motion-graphics explainer video — transcribe with timestamps (SenseVoice), storyboard against the narration, build deterministic Remotion scenes, verify key frames, render. Docs are in Chinese; the code and workflow are language-agnostic.
 
@@ -76,28 +76,62 @@ voiceover-motion-video/
 ├── SKILL.md                     # skill 主流程（Claude 读这个干活）
 ├── scripts/
 │   ├── transcribe_ts.py         # 带时间戳转写（VAD + SenseVoice）
-│   ├── align_marks.py           # 分镜切点计算（字符比例法 → 秒 + 帧号）
-│   └── broll_fetch.py           # B-roll 素材搜采（Pexels/Pixabay/Openverse/YouTube）+ 防复用台账
+│   ├── align_tokens.py          # 分镜切点精确对齐（token 级时间戳，正片用这个）
+│   ├── align_marks.py           # 字符比例法估时（已弃用于正片，仅临时估算）
+│   ├── make_subs.py             # 烧录字幕轨生成（token 对齐 → subs.js）
+│   ├── broll_fetch.py           # B-roll 素材搜采/质检/2.5D运镜（四源 + 防复用台账）
+│   ├── depthflow_animate.py     # 静图 → 2.5D 视差运镜视频（DepthFlow）
+│   ├── make_outline.py          # 抠图 → WindOutline 风动描边素材对
+│   ├── overlap-check.mjs        # 排版自动质检：逐帧扫元素重叠 + 出框
+│   └── qc-stills.mjs            # 一次 bundle 批量抽帧 QC
 ├── references/
 │   ├── design-system.md         # 品牌 tokens · 动效语言 · 首帧/封面规范 · 踩坑清单
 │   ├── remotion-workflow.md     # 工程手册 · 组件速查 · 渲染命令
+│   ├── three-motion.md          # 3D 动效手册（three.js/Globe3D/Bars3D + 确定性坑）
 │   └── broll-assets.md          # 实拍素材规范：配额 · 分镜映射 · 信源与版权红线 · 防复用
-├── template/                    # 独立 Remotion 工程 + 示例视频全场景源码
+├── skins/
+│   ├── black-dotgrid/           # 皮肤①黑底点阵（投研线默认）：Fx/fun/ui/TickerChip/字幕/水印
+│   └── paper/                   # 皮肤②分析师手账（投教线）：纸面组件全家桶 + 翻页转场
+├── motionkit/                   # 跨视频共享动效库：enter presets/点阵背景/KenBurns/DrawSVG + three 3D
+├── template/                    # 独立 Remotion 工程 + 示例视频全场景源码（旧紫底皮肤）
 └── assets/                      # README 配图
 ```
+
+## 🎭 两套视觉皮肤
+
+| | 黑底点阵（投研线默认） | 分析师手账（投教线） |
+|---|---|---|
+| 底 | 近黑 `#050505` + 紫点阵漂移光晕 | 暖米白纸 `#F2EFE8` + 纤维噪点 |
+| 观感 | 数据终端 / 突发新闻 | 一页值得收藏的笔记 |
+| 招牌组件 | CRT 雪花电视闪回、Glitch 故障转场、WindOutline 风动描边、MoneyRain/SlamStamp 趣味层 | 纸卡拍落、拍立得+图钉、荧光笔扫过、红笔手绘圈、印章、翻页转场 |
+| 大章转场 | 涟漪擦除 | 翻页 PageFlip |
+| 适用 | 财报解读、热点拆解、公司复盘 | 概念/方法论投教 |
+
+用法与设计纪律见 [skins/black-dotgrid/README.md](skins/black-dotgrid/README.md) 和 [skins/paper/README.md](skins/paper/README.md)。两套皮肤共享 `motionkit/`（语义入场 preset、DotGridBackdrop、KenBurns、DrawSVG 图标线稿、3D 地球/柱阵）。
 
 ## 🎨 设计系统（示例品牌包，可整套替换）
 
 | Token | 值 | 用途 |
 |---|---|---|
-| 深空紫 | `#1D0038` | 底色 + 涟漪母题 |
-| 品牌紫 / 亮紫 | `#6F00FF` / `#A050FF` | 卡片、描边、转场 |
-| 品牌黄 | `#F9F339` | **只给全片最关键的一两处** |
-| 涨 / 跌 | `#2ebd85` / `#f6465d` | 固定不换 |
+| 近黑底 | `#050505` | 投研线底色（+点阵光晕；旧深空紫 `#1D0038` 见 template/） |
+| 纸底 | `#F2EFE8` | 投教线底色（+纤维噪点） |
+| 品牌紫 / 亮紫 | `#6F00FF` / `#A050FF` | 卡片、描边、转场、点阵 |
+| 品牌黄 | `#F9F339` | **只给全片最关键的一两处**（纸面皮肤=荧光笔） |
+| 涨 / 跌 | 深底 `#2ebd85`/`#f6465d` · 纸底 `#0B8043`/`#C5221F` | 固定不换 |
 
 动效语言按"意图 → 动效"对照表组织（登场=弹簧、数字=count-up、冲击=overshoot+震屏、切换=涟漪擦除……），换品牌只需改 `theme.js` 一个文件。完整规范和 8 条真实踩坑（方块底 emoji 违和、拍间残影公式、PingFang 字重上限、连线对齐……）见 [references/design-system.md](references/design-system.md)。
 
 ## 🔁 迭代记录
+
+**v4 · 2026-09-02**（7 月底至 9 月初 20+ 支成片的沉淀：两套新皮肤 + 共享动效库 + 自动质检）：
+
+- **皮肤①黑底点阵（skins/black-dotgrid/）** — 投研线弃紫底改近黑+点阵，紫色降级为元素色；新特效 CRT（真实访谈视频包进雪花电视=老录像既视感）、Glitch（暗闪+细撕裂线，实心大色块会把整屏糊成灰）、WindOutline（抠图风动描边）；fun.jsx 14 个趣味组件落地"每场一个图形主角、万物皆动"
+- **皮肤②分析师手账（skins/paper/）** — 投教线独立纸面皮肤：米白纸底+墨字+荧光笔+红笔+印章+翻页转场；封面走"纸面+拍立得实拍窗口"，与黑底封面肉眼可辨区分
+- **motionkit/ 共享动效库** — enter/exit 语义 preset（10 种入场，过冲钳制）、DotGridBackdrop、KenBurns、DrawSVG 图标线稿 + three/ 3D 层（Globe3D 地球、Bars3D 柱阵，`--gl=angle`、three-globe 确定性坑已封死）
+- **烧录字幕管线** — align_tokens.py（token 级时间戳，字符比例法在去气口音频上实测漂 4s 已弃用）+ make_subs.py（ASR 错字锚点→改正文本）+ 两套皮肤各自的 Subtitle 组件
+- **排版自动质检** — overlap-check.mjs 逐帧扫 DOM 包围盒（4 类假阳性抑制：墨迹框/嵌套/裁切/3D 翻面），肉眼抽帧必漏的重叠和出框全抓出来；qc-stills.mjs 批量抽帧提速
+- **实拍开场标准模板（design-system.md §1.5.1）** — 主角实拍打底+左黑区渐变+日期章+大标题，frame 0 完整、frame 1 起强冲击动画
+- **免责水印全片常驻** — Disclaimer 组件挂顶层，交付前抽 3 帧验收；只放片尾不合规
 
 **v3 · 2026-07-24**（连续多期同款开场被抖音判"批量发布违规或低质内容"限流后，针对平台查重机制的一轮硬迭代）：
 

@@ -7,8 +7,12 @@
   search <query> [--source pexels|pixabay|openverse|youtube|all] [--portrait] [-n N]
   fetch  <source:id> [--query q]        # 下载图库素材入池, 如 pexels:12345
   yt     <url> [--section MM:SS-MM:SS]  # yt-dlp 下载 YouTube/Vimeo/X 等(原流无水印)
+  qc     <asset-id|文件> [-n 4]          # 抽帧质检: 均匀抽 N 帧存 jpg, 供 LLM 看图过滤
+  animate <asset-id|图片> [--preset zoomin|dolly|orbital|circle|...] # DepthFlow 静图→2.5D 运镜视频
   used   <asset-id>... --video <slug>   # 标记素材已用于某期视频
   list   [--unused] [--grep 关键词]      # 查看素材池
+
+搜索结果自带台账标注: ✔已入池 / ⛔已用于某期(跨期复用会撞画面指纹, 必须换裁切/运镜)。
 
 API key(仅 pexels/pixabay 需要, 免费注册):
   env PEXELS_API_KEY / PIXABAY_API_KEY, 或钥匙串:
@@ -32,8 +36,7 @@ def find_pool():
     env = os.environ.get("BROLL_POOL")
     if env:
         return Path(env).expanduser()
-    legacy = Path.home() / "Desktop/ClaudeCode/broll-pool"
-    return legacy if legacy.exists() else Path.home() / "broll-pool"
+    return Path.home() / "broll-pool"
 
 
 POOL = find_pool()
@@ -108,6 +111,14 @@ def need_key(name, env, service, signup):
 
 # ---------- search ----------
 
+def used_note(ledger, asset_id):
+    a = ledger["assets"].get(asset_id)
+    if not a:
+        return ""
+    used = a.get("used_in") or []
+    return f" | ⛔已用于:{','.join(used)}" if used else " | ✔已入池"
+
+
 def search_pexels(query, n, portrait):
     key = get_key("PEXELS_API_KEY", "pexels-api-key")
     if not key:
@@ -118,9 +129,11 @@ def search_pexels(query, n, portrait):
         params["orientation"] = "portrait"
     data = http_json("https://api.pexels.com/videos/search?" + urllib.parse.urlencode(params),
                      {"Authorization": key})
+    ledger = load_ledger()
     for v in data.get("videos", []):
         best = max(v["video_files"], key=lambda f: f.get("width") or 0)
-        print(f"pexels:{v['id']} | {v['duration']}s | {best['width']}x{best['height']} | {v['url']}")
+        aid = f"pexels:{v['id']}"
+        print(f"{aid} | {v['duration']}s | {best['width']}x{best['height']} | {v['url']}{used_note(ledger, aid)}")
 
 
 def search_pixabay(query, n, portrait):
@@ -130,12 +143,14 @@ def search_pixabay(query, n, portrait):
         return
     params = {"key": key, "q": query, "per_page": max(n, 3)}
     data = http_json("https://pixabay.com/api/videos/?" + urllib.parse.urlencode(params))
+    ledger = load_ledger()
     shown = 0
     for v in data.get("hits", []):
         big = v["videos"].get("large") or v["videos"]["medium"]
         if portrait and big["width"] >= big["height"]:
             continue
-        print(f"pixabay:{v['id']} | {v['duration']}s | {big['width']}x{big['height']} | {v['tags']} | {v['pageURL']}")
+        aid = f"pixabay:{v['id']}"
+        print(f"{aid} | {v['duration']}s | {big['width']}x{big['height']} | {v['tags']} | {v['pageURL']}{used_note(ledger, aid)}")
         shown += 1
         if shown >= n:
             break
@@ -256,6 +271,80 @@ def fetch_yt(url, section, title, browser_cookies=None):
         "section": section or "full"})
 
 
+# ---------- qc / animate ----------
+
+def resolve_asset(target):
+    """asset-id(支持前缀模糊) 或文件路径 → Path"""
+    ledger = load_ledger()
+    a = ledger["assets"].get(target)
+    if not a:  # 前缀/文件名模糊匹配, 如 openverse:a7565c4f 匹配完整 uuid 的 key
+        hits = [v for k, v in ledger["assets"].items()
+                if k.startswith(target) or target in Path(v["file"]).name]
+        if len(hits) == 1:
+            a = hits[0]
+        elif len(hits) > 1:
+            print(f"[!] {target} 匹配到多个素材, 用完整 id: " + ", ".join(
+                k for k in ledger["assets"] if k.startswith(target)))
+    return Path(a["file"]) if a else Path(target).expanduser()
+
+
+def qc(target, n):
+    """均匀抽 N 帧存 jpg — 供 LLM 用 Read 看图质检(相关性/水印/画质)"""
+    path = resolve_asset(target)
+    if not path.exists():
+        return print(f"[!] 找不到文件: {path}")
+    if path.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp", ".gif"):
+        return print(f"[图片] 直接用 Read 看图: {path}")
+    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                        "-of", "csv=p=0", str(path)], capture_output=True, text=True)
+    try:
+        dur = float(r.stdout.strip())
+    except ValueError:
+        return print(f"[!] ffprobe 读不到时长: {(r.stderr or '')[-300:]}")
+    outdir = POOL / "qc" / path.stem
+    outdir.mkdir(parents=True, exist_ok=True)
+    print(f"时长 {dur:.1f}s, 抽 {n} 帧:")
+    for i in range(n):
+        t = dur * (i + 0.5) / n
+        dest = outdir / f"{path.stem}_{i}_{t:.1f}s.jpg"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", f"{t:.2f}", "-i", str(path),
+                        "-frames:v", "1", "-q:v", "3", str(dest)], check=False)
+        print(f"  {dest}")
+    print("→ 用 Read 逐张看: ①与口播语义相关? ②无水印/台标? ③画质构图能用? 顺带记下最贴合的时间段(qc 文件名带秒数)")
+
+
+# DepthFlow 运镜预设(实现在同目录 depthflow_animate.py)
+DF_PRESETS = ["zoomin", "zoomout", "dolly", "orbital", "circle", "vertical", "horizontal"]
+PY311 = next((p for p in ("/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",) if Path(p).exists()), sys.executable)  # depthflow 所在解释器,按机器情况改
+
+
+def animate(target, preset, seconds, height, fps):
+    """DepthFlow: 静图 → 2.5D 视差运镜视频, 输出入池并记台账"""
+    src = resolve_asset(target)
+    if not src.exists():
+        return print(f"[!] 找不到图片: {src}")
+    if preset not in DF_PRESETS:
+        return print(f"[!] preset 只支持 {DF_PRESETS}")
+    driver = Path(__file__).parent / "depthflow_animate.py"
+    dest = POOL / "videos" / f"depthflow_{src.stem}_{preset}.mp4"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    cmd = [PY311, str(driver), str(src), "-o", str(dest), "--preset", preset,
+           "--time", str(seconds), "--fps", str(fps), "--height", str(height)]
+    print("$", " ".join(cmd))
+    r = subprocess.run(cmd)
+    if r.returncode != 0 or not dest.exists():
+        return print("[!] depthflow 渲染失败(首次运行会下载深度模型, 需要网络; 失败可重试)")
+    ledger = load_ledger()
+    # 继承源图的授权信息
+    src_entry = ledger["assets"].get(target) or {}
+    add_asset(ledger, f"depthflow:{src.stem}_{preset}", {
+        "source": "depthflow", "query": src_entry.get("query", ""), "file": str(dest),
+        "url": src_entry.get("url", str(src)),
+        "license": src_entry.get("license", "同源图授权; 发抖音标注AI生成"),
+        "from_image": str(src), "preset": preset, "duration": seconds})
+    print("[提醒] AI 生成/加工素材发抖音需主动标注 AIGC")
+
+
 # ---------- used / list ----------
 
 def mark_used(asset_ids, video_slug):
@@ -305,6 +394,17 @@ def main():
     y.add_argument("--browser-cookies", metavar="BROWSER",
                    help="YouTube 遇 bot 风控时用, 如 chrome (读你自己浏览器的登录态)")
 
+    q = sub.add_parser("qc", help="抽帧质检(供 LLM 看图过滤)")
+    q.add_argument("target", help="asset-id 或 视频文件路径")
+    q.add_argument("-n", type=int, default=4, help="抽帧数")
+
+    m = sub.add_parser("animate", help="DepthFlow 静图→2.5D 运镜视频")
+    m.add_argument("target", help="asset-id 或 图片路径")
+    m.add_argument("--preset", default="zoomin", choices=DF_PRESETS)
+    m.add_argument("--time", type=float, default=4.0, help="时长秒")
+    m.add_argument("--height", type=int, default=1920, help="输出高度像素")
+    m.add_argument("--fps", type=int, default=30)
+
     u = sub.add_parser("used", help="标记素材已用于某期")
     u.add_argument("asset_ids", nargs="+")
     u.add_argument("--video", required=True, help="视频 slug, 如 googleq2")
@@ -330,6 +430,10 @@ def main():
         fetch(a.source_id, a.query)
     elif a.cmd == "yt":
         fetch_yt(a.url, a.section, a.title, a.browser_cookies)
+    elif a.cmd == "qc":
+        qc(a.target, a.n)
+    elif a.cmd == "animate":
+        animate(a.target, a.preset, a.time, a.height, a.fps)
     elif a.cmd == "used":
         mark_used(a.asset_ids, a.video)
     elif a.cmd == "list":
