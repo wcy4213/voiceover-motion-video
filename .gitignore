@@ -1,0 +1,19 @@
+node_modules/
+out/
+.DS_Store
+*.mp3
+*.wav
+*.m4a
+template/public/logos/*.png
+transcript.json
+__pycache__/
+# 10-08：厂商声明类字体不随仓库分发（见 public/fonts/README.md）
+public/fonts/*.ttf
+public/fonts/*.otf
+!public/fonts/SmileySans-Oblique.ttf
+!public/fonts/ZcoolKuaiLe-Regular.ttf
+!public/fonts/Montserrat-Black.otf
+!public/fonts/PlayfairDisplay-Black.otf
+!public/fonts/AbrilFatface-Regular.ttf
+!public/fonts/Oswald-VF.ttf
+public/fonts/DingTalkJinBuTi.ttf

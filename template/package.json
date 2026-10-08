@@ -1,0 +1,32 @@
+{
+  "name": "voiceover-motion-video-template",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.jsx",
+    "compositions": "remotion compositions src/index.jsx",
+    "still": "remotion still src/index.jsx",
+    "render": "remotion render src/index.jsx EarningsWeek out/video.mp4 --codec=h264 --crf=17"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.438",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.438",
+    "@remotion/light-leaks": "4.0.438",
+    "@remotion/captions": "4.0.438",
+    "@remotion/lottie": "4.0.438",
+    "@remotion/three": "4.0.438",
+    "@remotion/noise": "4.0.438",
+    "@remotion/paths": "4.0.438",
+    "@remotion/shapes": "4.0.438",
+    "@remotion/transitions": "4.0.438",
+    "@remotion/motion-blur": "4.0.438",
+    "three": "^0.185.1",
+    "@react-three/fiber": "^9.7.0",
+    "@react-three/drei": "^10.7.8",
+    "three-globe": "^2.45.2",
+    "lottie-web": "^5.13.0"
+  }
+}
