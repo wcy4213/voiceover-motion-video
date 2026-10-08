@@ -1,51 +1,63 @@
-<svg width="1400" height="270" viewBox="0 0 1400 270" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1400" height="270" fill="#1D0038" rx="18"/>
-  <g font-family="-apple-system,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif">
-    <!-- step boxes -->
-    <g>
-      <rect x="34"  y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
-      <rect x="262" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
-      <rect x="490" y="62" width="190" height="128" rx="20" fill="#F9F339" fill-opacity="0.07" stroke="#F9F339" stroke-opacity="0.8" stroke-width="3"/>
-      <rect x="718" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
-      <rect x="946" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
-      <rect x="1174" y="62" width="190" height="128" rx="20" fill="#6F00FF" fill-opacity="0.14" stroke="#A050FF" stroke-opacity="0.55" stroke-width="2.5"/>
-    </g>
-    <!-- emojis -->
-    <g font-size="40" text-anchor="middle">
-      <text x="129"  y="118">🎙️</text>
-      <text x="357"  y="118">📋</text>
-      <text x="585"  y="118">🚦</text>
-      <text x="813"  y="118">🧩</text>
-      <text x="1041" y="118">🔍</text>
-      <text x="1269" y="118">🎬</text>
-    </g>
-    <!-- labels -->
-    <g font-size="26" font-weight="700" fill="#FFFFFF" text-anchor="middle">
-      <text x="129"  y="156">带时间戳转写</text>
-      <text x="357"  y="156">分镜动效计划</text>
-      <text x="585"  y="156" fill="#F9F339">用户确认</text>
-      <text x="813"  y="156">场景搭建</text>
-      <text x="1041" y="156">关键帧抽查</text>
-      <text x="1269" y="156">渲染交付</text>
-    </g>
-    <!-- sublabels -->
-    <g font-size="16" fill="#9FB7FF" text-anchor="middle">
-      <text x="129"  y="180">VAD + SenseVoice</text>
-      <text x="357"  y="180">分镜表 · 先定比例</text>
-      <text x="585"  y="180" fill="#E3D9FF">硬闸门 · 不点头不动工</text>
-      <text x="813"  y="180">Remotion 逐帧确定性</text>
-      <text x="1041" y="180">静帧自查 8 项</text>
-      <text x="1269" y="180">H.264 + 原声口播</text>
+<svg width="1400" height="250" viewBox="0 0 1400 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#ffffff" fill-opacity="0.09"/></pattern>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,1 L8,5 L0,9" fill="none" stroke="#A050FF" stroke-width="1.8" stroke-opacity="0.8"/></marker>
+  </defs>
+  <rect width="1400" height="250" fill="#0B0B0D" rx="18"/>
+  <rect width="1400" height="250" fill="url(#dots)" rx="18"/>
+  <g font-family="-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" text-anchor="middle">
+    <!-- 7 steps -->
+    <g id="steps">
+      <g transform="translate(26,58)">
+        <rect width="168" height="128" rx="18" fill="#6F00FF" fill-opacity="0.16" stroke="#A050FF" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="84" y="34" font-size="13" fill="#A050FF" letter-spacing="2">01</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F2F0FF">脚本</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">风格库 A–J · 格式节拍</text>
+      </g>
+      <g transform="translate(222,58)">
+        <rect width="168" height="128" rx="18" fill="#6F00FF" fill-opacity="0.16" stroke="#A050FF" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="84" y="34" font-size="13" fill="#A050FF" letter-spacing="2">02</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F2F0FF">音频</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">去气口 · 转写 · 对齐</text>
+      </g>
+      <g transform="translate(418,58)">
+        <rect width="168" height="128" rx="18" fill="#6F00FF" fill-opacity="0.16" stroke="#A050FF" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="84" y="34" font-size="13" fill="#A050FF" letter-spacing="2">03</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F2F0FF">决策引擎</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">格式 × 皮肤 × 技术 × 镜头</text>
+      </g>
+      <g transform="translate(614,58)">
+        <rect width="168" height="128" rx="18" fill="#F9F339" fill-opacity="0.08" stroke="#F9F339" stroke-opacity="0.85" stroke-width="2.5"/>
+        <text x="84" y="34" font-size="13" fill="#F9F339" letter-spacing="2">04 ⛔</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F9F339">分镜 · 确认</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">文字版先过目，再写代码</text>
+      </g>
+      <g transform="translate(810,58)">
+        <rect width="168" height="128" rx="18" fill="#6F00FF" fill-opacity="0.16" stroke="#A050FF" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="84" y="34" font-size="13" fill="#A050FF" letter-spacing="2">05</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F2F0FF">Remotion</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">契约皮肤 + motionkit</text>
+      </g>
+      <g transform="translate(1006,58)">
+        <rect width="168" height="128" rx="18" fill="#6F00FF" fill-opacity="0.16" stroke="#A050FF" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="84" y="34" font-size="13" fill="#A050FF" letter-spacing="2">06</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F2F0FF">QC</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">节奏 · 封面查重 · 审片卡</text>
+      </g>
+      <g transform="translate(1202,58)">
+        <rect width="168" height="128" rx="18" fill="#6F00FF" fill-opacity="0.16" stroke="#A050FF" stroke-opacity="0.5" stroke-width="2"/>
+        <text x="84" y="34" font-size="13" fill="#A050FF" letter-spacing="2">07</text>
+        <text x="84" y="68" font-size="24" font-weight="700" fill="#F2F0FF">交付 · 回流</text>
+        <text x="84" y="100" font-size="13" fill="#B8B3C8">发布物料 · 完播曲线</text>
+      </g>
     </g>
     <!-- arrows -->
-    <g font-size="30" fill="#7C9CFD" text-anchor="middle">
-      <text x="243"  y="136">➜</text>
-      <text x="471"  y="136">➜</text>
-      <text x="699"  y="136">➜</text>
-      <text x="927"  y="136">➜</text>
-      <text x="1155" y="136">➜</text>
+    <g stroke="#A050FF" stroke-opacity="0.8" stroke-width="1.8" fill="none" marker-end="url(#arr)">
+      <line x1="196" y1="122" x2="218" y2="122"/><line x1="392" y1="122" x2="414" y2="122"/><line x1="588" y1="122" x2="610" y2="122"/>
+      <line x1="784" y1="122" x2="806" y2="122"/><line x1="980" y1="122" x2="1002" y2="122"/><line x1="1176" y1="122" x2="1198" y2="122"/>
     </g>
-    <!-- title -->
-    <text x="40" y="40" font-size="19" fill="#A050FF" letter-spacing="4">口播音频 → 动效解说视频 · 六步流水线</text>
+    <!-- feedback loop -->
+    <path d="M1286 190 C 1286 232, 110 232, 110 190" fill="none" stroke="#F9F339" stroke-opacity="0.45" stroke-width="1.6" stroke-dasharray="5 6" marker-end="url(#arr)"/>
+    <text x="700" y="238" font-size="12" fill="#8E8A9B">完播曲线 → 开场漏 / 断崖 / 匀速 三类诊断 → 回写规则</text>
   </g>
 </svg>
