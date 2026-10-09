@@ -5,13 +5,11 @@ description: 视频生产 agent（唯一入口，2026-10-08 由 video-director +
 
 # 视频生产 agent（唯一入口）
 
-> 公开版说明：`rules/requirements.md`（内部逐条打回清单）与 `review.md`（内部路线图）、脚本语料 `script/references/{corpus,exemplars}`、第三方参考原文 `craft/vendor/` 未随仓库分发；其余文件与内部版一致。品牌（Bobby AI / RockFlow）作为示例品牌包保留，换品牌改 `theme.js` 与 `craft/skins.md` 即可。
-
 一个 agent 管全链路：**选题与脚本 → 音频 → 决策（格式·皮肤·技术·镜头）→ 分镜 → 工程 → QC → 渲染 → 交付 → 数据回流**。以前分散在 6 个 skill 里的内容全部收进本目录。
 
 **优先级（冲突时从上往下）**：① 平台合规自检清单 与平台红线（违法/封号风险，用户当场要求越线也要先提示风险）② 用户当场指令 ③ `rules/requirements.md`（历次指令汇总的硬规则；与 compliance-gate 冲突的条目以 `rules/requirements.md` 里**日期更新**的为准，见该文件 §0.5）④ 品牌规范与 Bobby 露出规则 ⑤ 本 agent 的审美/决策推荐（线别默认皮肤优先于轮换推荐，见 decide.md 2.1b）。
 
-**独立保留、由本 agent 调用的工具 skill**：平台合规自检清单（合规关卡）、[remove-breath-gaps](https://github.com/wcy4213/remove-breath-gaps)（去气口）、`video-deconstructor`（对标拆解）、`remotion-best-practices`（Remotion API，钉 4.0.437 版）、`disney-animation-rule-skill`（动作原则）、`remotion-3d-ticker`（3D 照片墙）、`shuorenhua`/`humanize`/`ai-check`（去 AI 味）、chatcut 插件（AI 生图/生视频，需 /mcp 授权）。
+**独立保留、由本 agent 调用的工具 skill**：平台合规自检清单（合规关卡）、`remove-breath-gaps`（去气口）、`video-deconstructor`（对标拆解）、`remotion-best-practices`（Remotion API，钉 4.0.437 版）、`disney-animation-rule-skill`（动作原则）、`remotion-3d-ticker`（3D 照片墙）、`shuorenhua`/`humanize`/`ai-check`（去 AI 味）、chatcut 插件（AI 生图/生视频，需 /mcp 授权）。
 
 ---
 
@@ -39,7 +37,7 @@ description: 视频生产 agent（唯一入口，2026-10-08 由 video-director +
 
 ## Step 2 · 音频
 
-`去气口1.3` = [remove-breath-gaps](https://github.com/wcy4213/remove-breath-gaps) degap + `atempo=1.3`；转写 `scripts/transcribe_ts.py`；切点 `scripts/align_tokens.py`（匹配度 1.00）；先核段落顺序（剪映粘贴错位实锤过）。细节 `pipelines/motion/README.md` Step 1–2。
+`去气口1.3` = `remove-breath-gaps` degap + `atempo=1.3`；转写 `scripts/transcribe_ts.py`；切点 `scripts/align_tokens.py`（匹配度 1.00）；先核段落顺序（剪映粘贴错位实锤过）。细节 `pipelines/motion/README.md` Step 1–2。
 
 ## Step 3 · 决策（本 agent 的核心）
 
@@ -73,6 +71,7 @@ description: 视频生产 agent（唯一入口，2026-10-08 由 video-director +
 - 贴纸片：`pipelines/sticker/README.md`。
 - 皮肤：新契约皮肤 `./skins/<id>/kit.jsx`（terminal/swiss/glass/brutal），老皮肤从最新工程复制（`craft/skins.md`）。
 - 技术组件：`techniques.md`（MG / 3D / 2.5D / 实拍 / AI 生成 / 动态排版 / 数据可视化 / 镜头切点 / 字体）。
+- **横屏无口播知识短片**（F21/F22/F23）：走 `kfilm/` 引擎（techniques §16），写 storyboard 不写场景代码；皮肤 museum。
 
 ## Step 6 · QC → 渲染 → 交付
 
@@ -97,12 +96,12 @@ description: 视频生产 agent（唯一入口，2026-10-08 由 video-director +
 | `decide.md` | 决策引擎：内容画像 8 维 → 格式/皮肤/主技术/规格 → 每句镜头功能与剪辑手法 |
 | `techniques.md` | 技术工具箱：MG / 3D / 2.5D / 实拍 / AI 生成 / 贴纸 / 录屏 / 数据可视化 / 字体 |
 | `expand.md` | 拓宽：金融之外的题材、输入/输出途径、系列化与新内容线、抖音 AI vibe 视频调研结论 |
-| `review.md` | 内部路线图（未随仓库分发） |
+| `review.md` | 抛开现有流程的整体审视与优化路线图 |
 | `rules/requirements.md` | 硬规则总清单（§0 暗号 §1 脚本 §2 分镜 §3 剪辑渲染 §4 交付包）——新指令先写进这里 |
 | `script/` | 脚本：finance-video-script 风格库（含语料/范文）+ 博主风格包 + 方法论 |
 | `pipelines/motion/` | 口播 → Remotion 动效片全流程 + 设计规范 + 工程手册 + B-roll + 3D 手册 |
 | `pipelines/sticker/` | 贴纸角色片全流程 |
-| `craft/` | 格式库 20 种、留存手册、美术指导、皮肤注册表与台账、字体许可、第三方参考原文（vendor/） |
+| `craft/` | 格式库 23 种、留存手册、美术指导、皮肤注册表与台账、字体许可、第三方参考原文（vendor/） |
 | `scripts/` | transcribe_ts / align_tokens / align_marks / broll_fetch / depthflow_animate / pace_check / retention_curve / cover_diff / beat_grid / build_claude_ai_zip.sh |
 
 ## 维护

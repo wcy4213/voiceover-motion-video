@@ -92,3 +92,24 @@
 - **皮肤 `skins/uimotion`**：以上三样的整合皮肤（米白/橙/紫/绿按幕换底 + 窗口面板 + 贴纸字）。Bobby 是 AI 产品，这是最贴身份的一套；也是 F20「问错 vs 问对」和海外投放的默认皮肤。
 - ⚠️ 写法坑：`<Sequence>` 里组件的 `at` 是**局部帧**（从 from 起算）；顶层 Carry / Buddy / ColorFlood 才用全局帧。demo：`motionkit/demo-ui/`。
 - **节拍网格** `scripts/beat_grid.py music.mp3 --snap-frames 帧,帧`：音乐烧进成片的版本（TikTok/Shorts/YT/投放）切点和关键动作吸到强拍；位移 >0.6s 报警（改分镜而不是硬拉）。抖音/小红书用平台曲库，不用。
+
+## 15. 知识短片语法（10-08 #vibe知识大赏 23 条拆解可借项，全部 Remotion 直接做）
+- **左上年份/回合/计时 HUD**（1494→2026；第 N 轮；楼层 32→3 跟着落）；**右上文献角标 + 片尾参考文献卡**（作者 年份）。
+- **一行字幕即脚本**：15–20 字/句、≈2s 一句、关键词换金/红、逐词淡入；无口播时字幕是唯一叙事轨。
+- **片名卡双出**：10–20s 一次、片尾一次；章节编号 00–08。
+- **◀◀ 倒带**：同一画面换一个条件重跑（谁先开口 / 倒回毕业那天）—— `Carry` + 反向插值。
+- **纸质道具卡 3D 翻入**：实验记录 / 论文封面 / 聊天截图 / 诺奖奖章（`Card3D` 或 2D 翻面）。
+- **模拟当主角**：实时变化的数字 + 仪表 + 曲线在 BGM 拍点上生长，峰值停顿打点（`beat_grid.py` + `Ring/IsoCity3D/Bars3D`）。
+- **聊天 UI 时间线**从热到冷（`ChatBubble` 逐年）。
+- **开场 0–3s 只动一个东西**（骰子落下 / 猫下落 / 粒子穿过指甲），字第 1 秒就出。
+- **片尾"此刻·你"落点 + 金句 + ✓清单 + 示意/免责角标**（"示意图 · 非真实行情""数学模型演示 · 不构成建议"）。
+- **制作流程借鉴**（Winhao 六步）：①先查证、每条带出处、查不到的删 → ②改成一幕一幕 → ③定样式先出 3 个挑、写 avoid（紫渐变/霓虹/字堆正中）→ ④分镜.md → ⑤"第一秒亮问题" → ⑥**先只渲开头 10 秒**，风格对了再做整条。
+
+## 16. 知识短片引擎 kfilm（10-09，"分镜即数据"第一版）
+- `kfilm/engine/Film.jsx`：一份 storyboard 对象 → 横屏 `KF-<id>`（1920×1080）+ 竖屏 `KF-<id>-V`（1080×1920）两条 composition，布局自动切换。
+- storyboard 字段：`captions:[{at,text}]`（一行字幕即脚本，`【】`包关键词变金）、`scenes:[{at,dur,type,props,hud:{year|title},cite}]`、`acts:[秒]`（金线转场）、`bobby:{at,hold}`（前 30s 前置位）、`tone`（brown/navy）、`disclaimer`。
+- 画面词汇 `engine/visuals.jsx`：`poster`（海报式首帧，frame 0 完整）· `title` · `big` · `doc`（纸卡）· `list` · `line` · `curve` · `bars` · `plane`（弹孔图）· `cards` · `sim` · `steps` · `compare` · `quote` · `ref`（文献卡）· `stamp/label/mark`。
+- ⚠️ storyboard 走 Remotion `defaultProps` 会被 JSON 序列化：**不能放函数**。曲线用 `fn: 'xlnx'`、格式化用 `yFmt: 'pct'` 之类字符串键在 visuals 里查表（10-09 踩过，整帧渲染失败）。
+- 音频：无口播；`public/kfilm/bed_200.wav` 由 `scripts/tools/make_bed.py` 程序合成（零版权，-18 dBFS），+ SfxTrack 按场景类型落 hit/whoosh；发布时可换平台曲库。
+- 新片：复制 `kfilm/films/rule37.js` 改内容 → 在 `kfilm/Root.jsx` 的 FILMS 登记 → `kfilm/render_all.sh` 模式渲染（硬码率 + 解码校验）。三支样片：rule37 / survivor / rates。
+- 决策模型类选题（37%、凯利）必须先回答评论区两问："总量未知怎么办"（用时间代替数量）和"试错成本有限"——否则高赞评论反着来（10-09 评论抓取实锤，`douyin-vibe-knowledge-benchmark/comments_summary.md`）。
